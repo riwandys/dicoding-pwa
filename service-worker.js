@@ -1,4 +1,4 @@
-const CACHE_NAME = 'premier-league-v2';
+const CACHE_NAME = 'premier-league';
 var urlsToCache = [
   '/',
   '/manifest.json',
@@ -14,6 +14,7 @@ var urlsToCache = [
   '/index.html',
   '/teams.html',
   '/pages/home.html',
+  '/pages/fixtures.html',
   '/pages/favorite.html',
   '/css/materialize.min.css',
   '/js/materialize.min.js',
@@ -34,10 +35,12 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   const base_url = 'https://api.football-data.org/v2/';
   const base_url2 = 'https://crests.football-data.org/';
+  const online = navigator.onLine;
 
   if (
-    event.request.url.indexOf(base_url) > -1 ||
-    event.request.url.indexOf(base_url2) > -1
+    (event.request.url.indexOf(base_url) > -1 ||
+      event.request.url.indexOf(base_url2) > -1) &&
+    online
   ) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) => {
@@ -49,16 +52,15 @@ self.addEventListener('fetch', (event) => {
     );
   } else {
     event.respondWith(
-      caches
-        .match(event.request, { ignoreSearch: true })
-        .then((response) => {
-          return response || fetch(event.request);
-        })
+      caches.match(event.request, { ignoreSearch: true }).then((response) => {
+        return response || fetch(event.request);
+      })
     );
   }
 });
 
 self.addEventListener('activate', (event) => {
+  clients.claim();
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(

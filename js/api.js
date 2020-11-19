@@ -84,6 +84,79 @@ const getStandings = () => {
     .catch(error);
 };
 
+const updateFixturesHTML = (data) => {
+  let fixturesHTML = `<table class="striped centered">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Home team</th>
+                  <th>Date</th>
+                  <th>Away team</th>
+                  <th></th>
+                </tr>
+              </thead>
+            <tbody>`;
+  let date = '';
+  let month = '';
+  let year = '';
+  let hour = '';
+  let minute = '';
+  data.matches.forEach((match) => {
+    let utcDate = new Date(match.utcDate);
+    date = utcDate.getDate();
+    month = utcDate.getMonth();
+    year = utcDate.getFullYear();
+    hour = utcDate.getHours();
+    minute = utcDate.getMinutes();
+    if (date < 10) {
+      date = '0' + date;
+    }
+    if (month < 10) {
+      month = '0' + month;
+    }
+    if (hour < 10) {
+      hour = '0' + hour;
+    }
+    if (minute < 10) {
+      minute = '0' + minute;
+    }
+    fixturesHTML += `
+                <tr>
+                  <td><img width="20" src="https://crests.football-data.org/${match.homeTeam.id}.svg"></td>
+                  <td>${match.homeTeam.name}</td>
+                  <td>${year}-${month}-${date}, ${hour}:${minute}</td>
+                  <td>${match.awayTeam.name}</td>
+                  <td><img width="20" src="https://crests.football-data.org/${match.awayTeam.id}.svg"></td>
+                </tr>
+            `;
+  });
+
+  fixturesHTML += '</tbody>';
+  // Sisipkan komponen card ke dalam elemen dengan id #content
+  document.getElementById('fixtures').innerHTML = fixturesHTML;
+};
+
+const getFixtures = () => {
+  if ('caches' in window) {
+    caches.match(base_url + 'competitions/2021/matches').then((response) => {
+      if (response) {
+        response.json().then((data) => updateFixturesHTML(data));
+      }
+    });
+  }
+
+  fetch(base_url + 'competitions/2021/matches', {
+    method: 'GET', // or 'PUT'
+    headers: {
+      'X-Auth-Token': apiKey,
+    },
+  })
+    .then(status)
+    .then(json)
+    .then((data) => updateFixturesHTML(data))
+    .catch(error);
+};
+
 const updateTeamDetailsHTML = (data) => {
   let teamHTML = `
           <h3>${data.name}</h3>

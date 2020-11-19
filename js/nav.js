@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", function() {
           getStandings();
         } else if (page === "favorite") {
           getSavedTeams();
+        } else if(page === "fixtures"){
+          getFixtures();
         }
 
         if (this.status == 200) {
