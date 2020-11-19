@@ -1,0 +1,48 @@
+{
+    "name": "Premier League",
+    "short_name": "Premier League App",
+    "description": "Aplikasi PWA tentang data sepakbola terkini",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#351A86",
+    "theme_color": "#351A86",
+    "icons": [
+        {
+            "src": "./image/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./image/icon-64.png",
+            "sizes": "64x64",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./image/icon-128.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./image/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./image/icon-256.png",
+            "sizes": "256x256",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./image/icon-384.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "gcm_sender_id": "963836000395"
+}
