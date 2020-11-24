@@ -5,27 +5,34 @@ importScripts(
 if (workbox) console.log(`Workbox berhasil dimuat`);
 else console.log(`Workbox gagal dimuat`);
 
-workbox.precaching.precacheAndRoute([
-  { url: '/', revision: '1' },
-  { url: '/manifest.json', revision: '1' },
-  { url: '/index.html', revision: '1' },
-  { url: '/nav.html', revision: '1' },
-  { url: '/teams.html', revision: '1' },
-  { url: '/css/materialize.min.css', revision: '1' },
-  { url: '/js/materialize.min.js', revision: '1' },
-  { url: '/js/nav.js', revision: '1' },
-  { url: '/js/api.js', revision: '1' },
-  { url: '/js/idb.js', revision: '1' },
-  { url: '/js/db.js', revision: '1' },
-  { url: '/image/badge.png', revision: '1' },
-  { url: '/image/icon.png', revision: '1' },
-  { url: '/image/favicon.png', revision: '1' },
-  { url: '/image/icon-64.png', revision: '1' },
-  { url: '/image/icon-128.png', revision: '1' },
-  { url: '/image/icon-192.png', revision: '1' },
-  { url: '/image/icon-256.png', revision: '1' },
-  { url: '/image/icon-384.png', revision: '1' },
-]);
+workbox.precaching.precacheAndRoute(
+  [
+    { url: '/', revision: '2' },
+    { url: '/manifest.json', revision: '2' },
+    { url: '/index.html', revision: '2' },
+    { url: '/nav.html', revision: '2' },
+    { url: '/teams.html', revision: '2' },
+    { url: '/css/materialize.min.css', revision: '2' },
+    { url: '/js/materialize.min.js', revision: '2' },
+    { url: '/js/nav.js', revision: '2' },
+    { url: '/js/api.js', revision: '2' },
+    { url: '/js/idb.js', revision: '2' },
+    { url: '/js/db.js', revision: '2' },
+    { url: '/js/favorite.js', revision: '2' },
+    { url: '/js/register-sw.js', revision: '2' },
+    { url: '/image/badge.png', revision: '2' },
+    { url: '/image/icon.png', revision: '2' },
+    { url: '/image/favicon.png', revision: '2' },
+    { url: '/image/icon-64.png', revision: '2' },
+    { url: '/image/icon-128.png', revision: '2' },
+    { url: '/image/icon-192.png', revision: '2' },
+    { url: '/image/icon-256.png', revision: '2' },
+    { url: '/image/icon-384.png', revision: '2' },
+  ],
+  {
+    ignoreUrlParametersMatching: [/.*/],
+  }
+);
 
 workbox.routing.registerRoute(
   new RegExp('/pages/'),
@@ -98,7 +105,7 @@ self.addEventListener('push', (event) => {
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: 1,
+      primaryKey: 2,
     },
   };
   event.waitUntil(
