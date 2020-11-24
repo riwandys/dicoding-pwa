@@ -12,28 +12,28 @@ const saveForLater = (team) => {
     .then((db) => {
       var tx = db.transaction('teams', 'readwrite');
       var store = tx.objectStore('teams');
-      
+
       store.add(team);
       return tx.complete;
     })
     .then(() => {
       console.log('Data berhasil di simpan.');
     });
-}
+};
 
 const unsaveTeam = (team) => {
   dbPromised
     .then((db) => {
       var tx = db.transaction('teams', 'readwrite');
       var store = tx.objectStore('teams');
-      
+
       store.delete(team.id);
       return tx.complete;
     })
     .then(() => {
       console.log('Data berhasil dihapus');
     });
-}
+};
 
 const getAll = () => {
   return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ const getAll = () => {
         resolve(teams);
       });
   });
-}
+};
 
 const getTeamById = (id) => {
   return new Promise((resolve, reject) => {
@@ -63,7 +63,7 @@ const getTeamById = (id) => {
       })
       .catch((error) => console.log(error));
   });
-}
+};
 
 const getFavoriteStatus = (id) => {
   return new Promise((resolve, reject) => {
@@ -83,4 +83,4 @@ const getFavoriteStatus = (id) => {
       })
       .catch((error) => console.log(error));
   });
-}
+};
