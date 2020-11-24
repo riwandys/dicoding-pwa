@@ -1,79 +1,89 @@
-const CACHE_NAME = 'premier-league';
-var urlsToCache = [
-  '/',
-  '/manifest.json',
-  '/image/badge.png',
-  '/image/icon.png',
-  '/image/favicon.png',
-  '/image/icon-64.png',
-  '/image/icon-128.png',
-  '/image/icon-192.png',
-  '/image/icon-256.png',
-  '/image/icon-384.png',
-  '/nav.html',
-  '/index.html',
-  '/teams.html',
-  '/pages/home.html',
-  '/pages/fixtures.html',
-  '/pages/favorite.html',
-  '/css/materialize.min.css',
-  '/js/materialize.min.js',
-  '/js/nav.js',
-  '/js/api.js',
-  '/js/idb.js',
-  '/js/db.js',
-];
+importScripts(
+  'https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js'
+);
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+if (workbox) console.log(`Workbox berhasil dimuat`);
+else console.log(`Workbox gagal dimuat`);
 
-self.addEventListener('fetch', (event) => {
-  const base_url = 'https://api.football-data.org/v2/';
-  const base_url2 = 'https://crests.football-data.org/';
-  const online = navigator.onLine;
+workbox.precaching.precacheAndRoute([
+  { url: '/', revision: '1' },
+  { url: '/manifest.json', revision: '1' },
+  { url: '/index.html', revision: '1' },
+  { url: '/nav.html', revision: '1' },
+  { url: '/teams.html', revision: '1' },
+  { url: '/css/materialize.min.css', revision: '1' },
+  { url: '/js/materialize.min.js', revision: '1' },
+  { url: '/js/nav.js', revision: '1' },
+  { url: '/js/api.js', revision: '1' },
+  { url: '/js/idb.js', revision: '1' },
+  { url: '/js/db.js', revision: '1' },
+  { url: '/image/badge.png', revision: '1' },
+  { url: '/image/icon.png', revision: '1' },
+  { url: '/image/favicon.png', revision: '1' },
+  { url: '/image/icon-64.png', revision: '1' },
+  { url: '/image/icon-128.png', revision: '1' },
+  { url: '/image/icon-192.png', revision: '1' },
+  { url: '/image/icon-256.png', revision: '1' },
+  { url: '/image/icon-384.png', revision: '1' },
+]);
 
-  if (
-    (event.request.url.indexOf(base_url) > -1 ||
-      event.request.url.indexOf(base_url2) > -1) &&
-    online
-  ) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        return fetch(event.request).then((response) => {
-          cache.put(event.request.url, response.clone());
-          return response;
-        });
-      })
-    );
-  } else {
-    event.respondWith(
-      caches.match(event.request, { ignoreSearch: true }).then((response) => {
-        return response || fetch(event.request);
-      })
-    );
-  }
-});
+workbox.routing.registerRoute(
+  new RegExp('/pages/'),
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'pages-cache',
+  })
+);
 
-self.addEventListener('activate', (event) => {
-  clients.claim();
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName != CACHE_NAME) {
-            console.log('ServiceWorker: cache ' + cacheName + ' dihapus');
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
+workbox.routing.registerRoute(
+  /^https:\/\/(storage|fonts)\.googleapis\.com/,
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'googleapis',
+  })
+);
+
+workbox.routing.registerRoute(
+  /^https:\/\/fonts\.gstatic\.com/,
+  workbox.strategies.cacheFirst({
+    cacheName: 'google-fonts-webfonts',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * 365,
+        maxEntries: 30,
+      }),
+    ],
+  })
+);
+
+workbox.routing.registerRoute(
+  /^https:\/\/unpkg\.com/,
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'snarkdown',
+  })
+);
+
+workbox.routing.registerRoute(
+  /^https:\/\/api\.football-data\.org\/v2/,
+  workbox.strategies.networkFirst({
+    cacheName: 'football-data',
+    networkTimeoutSeconds: 5,
+  })
+);
+
+workbox.routing.registerRoute(
+  /^https:\/\/crests\.football-data\.org/,
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'football-data',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * 365,
+        maxEntries: 20,
+      }),
+    ],
+  })
+);
 
 self.addEventListener('push', (event) => {
   var body;
