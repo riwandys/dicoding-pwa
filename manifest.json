@@ -1,6 +1,6 @@
 {
-    "name": "Premier League",
-    "short_name": "Premier League App",
+    "name": "Premier League App",
+    "short_name": "Premier League",
     "description": "Aplikasi PWA tentang data sepakbola terkini",
     "start_url": "index.html",
     "display": "standalone",
