@@ -254,7 +254,7 @@ const getSavedTeams = () => {
       standingsHTML += `
       <div class="col s12 m6 l4">
         <div class="card horizontal hoverable">
-          <div class="card-image">
+          <div class="card-image responsive-img">
             <img width="20" src="${team.crestUrl}">
           </div>
           <div class="card-stacked">
