@@ -2,7 +2,7 @@
     "name": "Premier League",
     "short_name": "Premier League App",
     "description": "Aplikasi PWA tentang data sepakbola terkini",
-    "start_url": "/index.html",
+    "start_url": "index.html",
     "display": "standalone",
     "background_color": "#351A86",
     "theme_color": "#351A86",
